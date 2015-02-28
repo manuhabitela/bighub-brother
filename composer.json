@@ -11,10 +11,11 @@
 	"homepage": "http://github.com/Leimi/bighub-brother",
 	"autoload": {
 		"psr-4": {
-			"BigBrother\\": "src/"
+			"BigHubBrother\\": "src/"
 		}
 	},
 	"require": {
-		"noodlehaus/config": "0.7.*"
+		"noodlehaus/config": "0.7.*",
+		"vlucas/phpdotenv": "~1.1"
 	}
 }
