@@ -1,0 +1,20 @@
+{
+	"name": "Leimi/bighub-brother",
+	"description": "Watch changes on specific parts of your codebase in GitHub.",
+	"authors": [{
+		"name": "Emmanuel Pelletier",
+		"email": "pelletier.emmanuel@gmail.com",
+		"homepage": "http://manu.habite.la",
+		"role": "Developer"
+	}],
+	"license": "MIT",
+	"homepage": "http://github.com/Leimi/bighub-brother",
+	"autoload": {
+		"psr-4": {
+			"BigBrother\\": "src/"
+		}
+	},
+	"require": {
+		"noodlehaus/config": "0.7.*"
+	}
+}

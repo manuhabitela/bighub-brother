@@ -1,0 +1,40 @@
+{
+  "users": {
+    // GitHub handle of someone who wants to be notified
+    "Leimi": {
+      // e-mail to use to notify the user
+      "e-mail": "pelletier.emmanuel@gmail.com",
+      // list of repos to watch
+      "repos": {
+        // you can use "*" to watch all repos
+        "*": {
+          // this is the important part: what files do you want to watch in this repo?
+          // give an array of glob patterns
+          "file_patterns": [
+            "**/*.less",
+            "**/*.scss"
+          ],
+          // do not be notified by changes made by those people (array of github handles)
+          // use this or `only_users`
+          "except_users": [
+            "someGuyITrust",
+            "anotherGitHubHandle"
+          ],
+          // be notified only by changes made by those people (array of github handles)
+          // use this or `except_users`
+          "only_users": [],
+          // `except_repos` key is only for the "*" repo: lets you watch all repos but the ones listed here
+          "except_repos": [
+            "IDVROOM-Android"
+          ],
+        },
+        "Leimi/bighub-brother": {
+          "file_patterns": ["**/*.md"],
+          "only_users": "felixgirault",
+          //you can set the `e-mail` key at the repo level to be warned at another adress than the default one
+          "e-mail": "pelletier.emmanuel+bighub-brother-change@gmail.com"
+        }
+      }
+    }
+  }
+}

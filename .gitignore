@@ -1,0 +1,5 @@
+sftp-config.json
+examples/
+vendor/
+config/config.json
+.htaccess
