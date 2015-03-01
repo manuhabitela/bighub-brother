@@ -27,7 +27,7 @@ In `dev`, it looks for an example push payload in `examples/push.json`.
 
 ### Create the config file
 
-The most important file is `config/config.json`. An example config file, with all the available options listed and commented, is `config/config-example.json`.
+The most important file is `config/config.json`. An example config file, with all the available options listed and commented, is `config/config-example.js`.
 
 Create the `config/config.json` and set it up as you wish (note: comments are not allowed in this file).
 
