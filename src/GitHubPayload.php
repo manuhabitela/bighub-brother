@@ -5,27 +5,79 @@ namespace BigHubBrother;
 class GitHubPayload
 {
 
+    protected $rawData;
     protected $data;
 
     public function __construct($options)
     {
         $options = array_merge(['secret' => null, 'data' => null], $options);
 
-        $this->setData( !empty($options['data']) ? $options['data'] : file_get_contents('php://input') );
+        $this->setRawData( !empty($options['data']) ? $options['data'] : file_get_contents('php://input') );
 
         if (!empty($options['secret']) && !$this->_validateSignature($this->getData(), $secret)) {
             throw new \Exception("GitHub signature doesn't match secret key");
         }
     }
 
-    public function setData($json)
+    public function setRawData($json)
     {
-        $this->data = is_string($json) ? json_decode($json) : $json;
+        $this->rawData = is_string($json) ? json_decode($json) : $json;
+    }
+
+    protected function parseData()
+    {
+        if (empty($this->rawData))
+            return '';
+
+        $data = [
+            'repository'  => $this->_getRepo(),
+            'compare_url' => $this->_getDiffURL(),
+            'changes'     => $this->_getChanges()
+        ];
+
+        return $data;
+    }
+
+    protected function _getChanges()
+    {
+        $commits = array_map(function($commit) {
+            if (!$commit->distinct)
+                return false;
+            $data = [];
+            $data['committer'] = $commit->committer->username;
+            $data['files'] = array_merge($commit->added, $commit->removed, $commit->modified);
+            return $data;
+        }, $this->rawData->commits);
+        $commits = array_filter($commits);
+
+        $changes = [];
+        foreach ($commits as $commit) {
+            $changes[ $commit['committer'] ] = empty($changes[ $commit['committer'] ]) ?
+                $commit['files'] :
+                array_merge($changes[ $commit['committer'] ], $commit['files']);
+        }
+
+        return $changes;
+    }
+
+    protected function _getRepo()
+    {
+        return $this->rawData->repository->full_name;
+    }
+
+    protected function _getDiffURL()
+    {
+        return $this->rawData->compare;
+    }
+
+    public function getRawData()
+    {
+        return $this->rawData;
     }
 
     public function getData()
     {
-        return $this->data;
+        return $this->parseData();
     }
 
     protected function _validateSignature($payload, $secret)
