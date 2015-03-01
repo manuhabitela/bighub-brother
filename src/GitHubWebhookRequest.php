@@ -2,7 +2,7 @@
 
 namespace BigHubBrother;
 
-class GitHubPayload
+class GitHubWebhookRequest
 {
 
     protected $rawData;

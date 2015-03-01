@@ -14,13 +14,14 @@ try {
 }
 
 try {
-    $payload = new BigHubBrother\GitHubPayload(
+    $push = new BigHubBrother\GitHubWebhookRequest(
         APPLICATION_ENV == "production" ?
             [ 'secret' => WEBHOOK_SECRET ] :
             [ 'data' => file_get_contents(__DIR__ . '/examples/push.json') ]);
-    $data = $payload->getData();
 } catch (Exception $e) {
     echo $e->getMessage();
 }
+
+$data = $push->getData();
 
 var_dump($data);
