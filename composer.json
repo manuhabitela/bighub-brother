@@ -15,7 +15,6 @@
 		}
 	},
 	"require": {
-		"noodlehaus/config": "0.7.*",
 		"vlucas/phpdotenv": "~1.1"
 	}
 }
