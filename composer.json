@@ -15,6 +15,7 @@
 		}
 	},
 	"require": {
-		"vlucas/phpdotenv": "~1.1"
+		"vlucas/phpdotenv": "~1.1",
+		"swiftmailer/swiftmailer": "@stable"
 	}
 }

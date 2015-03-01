@@ -29,6 +29,11 @@ class Config
         return $this->config['users'][$user];
     }
 
+    public function getFromMail()
+    {
+        return $this->config['from'];
+    }
+
     public function getRepo($repo, $user)
     {
         $userConf = $this->getUser($user);

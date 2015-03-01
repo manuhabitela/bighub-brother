@@ -62,4 +62,24 @@ class Utility
     {
         return self::_pickOrWithout(false, $data, $blacklist);
     }
+
+    public static function url($url, $text, $html)
+    {
+        return $html ?
+            "<a href=\"$url\">$text</a>" :
+            "$text ($url)";
+    }
+
+    public static function htmlToText($html)
+    {
+        $text = $html;
+        $text = str_replace("</p>", "\n\n", $text);
+        $text = str_replace("<br>", "\n\n", $text);
+        $text = str_replace("<ul>", "\n", $text);
+        $text = str_replace("<li>", "  * ", $text);
+        $text = str_replace("<hr>", "\n----------------------\n", $text);
+        $text = strip_tags($text);
+        $text = trim($text);
+        return $text;
+    }
 }

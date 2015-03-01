@@ -29,11 +29,13 @@ class GitHubWebhookRequest
         if (empty($this->rawData))
             return '';
 
+        $branch = $this->_getBranch();
         $data = [
-            'repository'  => $this->_getRepo(),
-            'compare_url' => $this->_getDiffURL(),
-            'branch_url'  => $this->_getBranchURL(),
-            'changes'     => $this->_getChanges()
+            'organization' => $this->_getOrg(),
+            'repository'   => $this->_getRepo(),
+            'compare_url'  => $this->_getDiffURL(),
+            'branch'       => $branch,
+            'changes'      => $this->_getChanges()
         ];
 
         return $data;
@@ -76,12 +78,35 @@ class GitHubWebhookRequest
         return str_replace("refs/heads/", "", $this->rawData->ref);
     }
 
-    protected function _getBranchURL()
+    protected function _getOrg()
     {
-        return sprintf("https://github.com/%s/tree/%s",
-            $this->_getRepo(),
-            $this->_getBranch()
-        );
+        return $this->rawData->organization->login;
+    }
+
+    public static function getUserURL($user)
+    {
+        return "https://github.com/$user";
+    }
+
+    public static function getOrgURL($org)
+    {
+        return self::getUserURL($org);
+    }
+
+    public static function getRepoURL($repo)
+    {
+        return "https://github.com/$repo";
+    }
+
+    public static function getBranchURL($branch, $repo)
+    {
+        return self::getRepoURL($repo) . "/tree/$branch";
+    }
+
+    public static function getFileURL($file, $branch, $repo)
+    {
+        $branchURL = self::getBranchURL($branch, $repo);
+        return str_replace("/tree/", "/blob/", $branchURL) . "/" . $file;
     }
 
     public function getRawData()

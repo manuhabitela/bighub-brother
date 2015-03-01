@@ -6,6 +6,7 @@ if (file_exists(__DIR__ . '/.env'))
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 define('WEBHOOK_SECRET', getenv('WEBHOOK_SECRET') !== false ? getenv('WEBHOOK_SECRET') : null);
 
+header('Content-Type: text/plain');
 
 try {
     $push = new BigHubBrother\GitHubWebhookRequest(
@@ -22,7 +23,6 @@ try {
     echo "Config error: " . $e->getMessage();
 }
 
-
 try {
     $notifier = new BigHubBrother\Notifier([
         'config' => $config,
@@ -31,4 +31,6 @@ try {
 } catch (Exception $e) {
     echo "Notifier error: " . $e->getMessage();
 }
-$notifier->notifyPeople();
+
+$log = $notifier->notifyPeople();
+echo $log;
