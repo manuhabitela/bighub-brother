@@ -7,11 +7,6 @@ if (file_exists(__DIR__ . '/.env')) {
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 define('WEBHOOK_SECRET', getenv('WEBHOOK_SECRET') !== false ? getenv('WEBHOOK_SECRET') : null);
 
-try {
-    $config = new Noodlehaus\Config('config/config.json');
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
 
 try {
     $push = new BigHubBrother\GitHubWebhookRequest(
@@ -19,9 +14,23 @@ try {
             [ 'secret' => WEBHOOK_SECRET ] :
             [ 'data' => file_get_contents(__DIR__ . '/examples/push.json') ]);
 } catch (Exception $e) {
-    echo $e->getMessage();
+    echo "Webhook error: " . $e->getMessage();
 }
 
-$data = $push->getData();
 
-var_dump($data);
+try {
+    $config = new BigHubBrother\Config(__DIR__ . '/config/config.json');
+} catch (Exception $e) {
+    echo "Config error: " . $e->getMessage();
+}
+
+
+try {
+    $notifier = new BigHubBrother\Notifier([
+        'config' => $config->toJSON(),
+        'data' => $push->getData()
+    ]);
+} catch (Exception $e) {
+    echo "Notifier error: " . $e->getMessage();
+}
+$notifier->sendMails();
