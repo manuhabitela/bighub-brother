@@ -3,6 +3,7 @@
 namespace BigHubBrother;
 
 use Exception;
+use BigHubBrother\Utility;
 
 class Config
 {

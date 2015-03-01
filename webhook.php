@@ -1,9 +1,8 @@
 <?php
 require 'vendor/autoload.php';
 
-if (file_exists(__DIR__ . '/.env')) {
+if (file_exists(__DIR__ . '/.env'))
   \Dotenv::load(__DIR__);
-}
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 define('WEBHOOK_SECRET', getenv('WEBHOOK_SECRET') !== false ? getenv('WEBHOOK_SECRET') : null);
 
@@ -17,7 +16,6 @@ try {
     echo "Webhook error: " . $e->getMessage();
 }
 
-
 try {
     $config = new BigHubBrother\Config(__DIR__ . '/config/config.json');
 } catch (Exception $e) {
@@ -27,10 +25,10 @@ try {
 
 try {
     $notifier = new BigHubBrother\Notifier([
-        'config' => $config->toJSON(),
+        'config' => $config,
         'data' => $push->getData()
     ]);
 } catch (Exception $e) {
     echo "Notifier error: " . $e->getMessage();
 }
-$notifier->sendMails();
+$notifier->notifyPeople();

@@ -32,6 +32,7 @@ class GitHubWebhookRequest
         $data = [
             'repository'  => $this->_getRepo(),
             'compare_url' => $this->_getDiffURL(),
+            'branch_url'  => $this->_getBranchURL(),
             'changes'     => $this->_getChanges()
         ];
 
@@ -68,6 +69,19 @@ class GitHubWebhookRequest
     protected function _getDiffURL()
     {
         return $this->rawData->compare;
+    }
+
+    protected function _getBranch()
+    {
+        return str_replace("refs/heads/", "", $this->rawData->ref);
+    }
+
+    protected function _getBranchURL()
+    {
+        return sprintf("https://github.com/%s/tree/%s",
+            $this->_getRepo(),
+            $this->_getBranch()
+        );
     }
 
     public function getRawData()

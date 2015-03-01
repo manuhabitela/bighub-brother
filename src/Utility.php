@@ -41,4 +41,25 @@ class Utility
         }
         return $return;
     }
+
+    protected static function _pickOrWithout($pick = true, array $data, array $list)
+    {
+        $filtered = [];
+        foreach ($data as $key => $value) {
+            if (in_array($key, $list) === $pick) {
+                $filtered[$key] = $value;
+            }
+        }
+        return $filtered;
+    }
+
+    public static function pick(array $data, array $whitelist)
+    {
+        return self::_pickOrWithout(true, $data, $whitelist);
+    }
+
+    public static function without(array $data, array $blacklist)
+    {
+        return self::_pickOrWithout(false, $data, $blacklist);
+    }
 }
