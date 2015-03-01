@@ -68,7 +68,7 @@ class Config
         if (!$repo)
             return false;
 
-        if (!empty($repo['except_committers']) && in_array($committer, $repo['except_committers']))
+        if (!empty($repo['exclude_committers']) && in_array($committer, $repo['exclude_committers']))
             return false;
 
         if (!empty($repo['only_committers']) && !in_array($committer, $repo['only_committers']))

@@ -25,7 +25,7 @@
         // made by people listed here
         //
         // fill this or 'only_committers'
-        "except_committers": [
+        "exclude_committers": [
           "someGuyITrust",
           "anotherGitHubHandle"
         ],
@@ -34,7 +34,7 @@
         // be notified for changes made on files matching 'file_patterns'
         // only made by people in this list
         //
-        // fill this or 'except_committers'
+        // fill this or 'exclude_committers'
         "only_committers": []
       },
 
