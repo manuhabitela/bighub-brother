@@ -64,10 +64,10 @@ class Notifier
             ->setFrom( $this->config->getFromMail() )
             ->setTo([ $userInfo['email'] => $userInfo['username'] ]);
 
-        return $mailer->send($message) ?
             $userInfo['username'] . " notified, sent this mail:\n  | " . str_replace("\n", "\n  | ", $body) :
             "Failed to notify " . $userInfo['username'];
 
+        return (getenv('APPLICATION_ENV') === "production" && $mailer->send($message) ?
     }
 
     protected function _getNotifyData($username, $info)
