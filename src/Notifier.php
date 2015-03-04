@@ -47,7 +47,9 @@ class Notifier
             }
         }
 
-        return trim($return);
+        $return = trim($return);
+
+        return strlen($return) ? $return : 'Nobody to notify.';
     }
 
     public function notifyUser($userInfo, $data)
