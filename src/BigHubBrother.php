@@ -15,7 +15,6 @@ class BigHubBrother
         $options = array_merge([
             'config' => __DIR__ . '/../config/config.json',
             'devExample' => __DIR__ . '/../examples/push.json',
-            'data' => null,
             'secret_env' => 'WEBHOOK_SECRET'
         ], $options);
 
