@@ -46,6 +46,7 @@ class Config
             return $specifics[$repo];
 
         if (!empty($default) && (
+            (empty($blacklist) && empty($whitelist)) ||
             (!empty($blacklist) && !in_array($repo, $blacklist)) ||
             (!empty($whitelist) && in_array($repo, $whitelist))
         ))
