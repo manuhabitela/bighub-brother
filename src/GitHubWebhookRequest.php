@@ -6,15 +6,17 @@ class GitHubWebhookRequest
 {
 
     protected $rawData;
-    protected $data;
+    protected $originalData;
 
     public function __construct($options)
     {
         $options = array_merge(['secret' => null, 'data' => null], $options);
 
-        $this->setRawData( !empty($options['data']) ? $options['data'] : file_get_contents('php://input') );
+        $this->originalData = !empty($options['data']) ? $options['data'] : file_get_contents('php://input');
 
-        if (!empty($options['secret']) && !$this->_validateSignature($this->getData(), $secret)) {
+        $this->setRawData($this->originalData);
+
+        if (!empty($options['secret']) && !$this->_validateSignature($this->originalData, $options['secret'])) {
             throw new \Exception("GitHub signature doesn't match secret key");
         }
     }
@@ -125,7 +127,7 @@ class GitHubWebhookRequest
             throw new \Exception('Missing X-Hub-Signature header.');
         }
 
-        $signature = $_SERVER['HTTP_X_HUB_SIGNATURE'];
-        return 'sha1=' . hash_hmac('sha1', $payload, $secret, false) === $signature;
+        $signature = 'sha1=' . hash_hmac('sha1', $payload, $secret);
+        return $signature === $_SERVER['HTTP_X_HUB_SIGNATURE'];
     }
 }
