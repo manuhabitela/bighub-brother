@@ -63,6 +63,15 @@ class Utility
         return self::_pickOrWithout(false, $data, $blacklist);
     }
 
+    public static function implodez($glue, $lastGlue, $pieces)
+    {
+        //http://stackoverflow.com/a/20217217/257559
+        $return = array_pop($pieces);
+        if ($pieces)
+            $return = implode($glue, $pieces) . $lastGlue . $return;
+        return $return;
+    }
+
     public static function url($url, $text, $html)
     {
         return $html ?
@@ -75,9 +84,8 @@ class Utility
         $text = $html;
         $text = str_replace("</p>", "\n\n", $text);
         $text = str_replace("<br>", "\n\n", $text);
-        $text = str_replace("<ul>", "\n", $text);
-        $text = str_replace("<li>", "  * ", $text);
-        $text = str_replace("<hr>", "\n----------------------\n", $text);
+        $text = str_replace("<li>", "\n  * ", $text);
+        $text = str_replace("<hr>", "\n-----------------------------\n", $text);
         $text = strip_tags($text);
         $text = trim($text);
         return $text;

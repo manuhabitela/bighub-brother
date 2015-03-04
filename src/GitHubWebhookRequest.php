@@ -62,6 +62,11 @@ class GitHubWebhookRequest
                 array_merge($changes[ $commit['committer'] ], $commit['files']);
         }
 
+        foreach ($changes as $user => &$changesSet) {
+            $changesSet = array_unique($changesSet);
+            sort($changesSet);
+        }
+
         return $changes;
     }
 

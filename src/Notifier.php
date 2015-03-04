@@ -31,7 +31,6 @@ class Notifier
             $repo = $this->config->getRepo($this->push['repository'], $username);
             if (!$repo)
                 continue;
-
             $data = $this->_getNotifyData($username, $info);
             $email = $repo['e-mail'] ?: null;
             if (!empty($data) && !empty($email)) {
@@ -64,15 +63,14 @@ class Notifier
             ->setFrom( $this->config->getFromMail() )
             ->setTo([ $userInfo['email'] => $userInfo['username'] ]);
 
-            $userInfo['username'] . " notified, sent this mail:\n  | " . str_replace("\n", "\n  | ", $body) :
-            "Failed to notify " . $userInfo['username'];
-
         return (getenv('APPLICATION_ENV') === "production" && $mailer->send($message) ?
+            $userInfo['username'] . " notified" :
+            "Failed to notify " . $userInfo['username']
+        ) . ", sent this mail:\n  | " . str_replace("\n", "\n  | ", $body);
     }
 
     protected function _getNotifyData($username, $info)
     {
-
         $changesToNotify = [];
 
         foreach ($this->push['changes'] as $committer => $files) {
@@ -101,9 +99,8 @@ class Notifier
 
         $template =
             "<p>Someone just pushed changes you want to be notified for in " .
-            Utility::url(GitHubWebhookRequest::getBranchURL($branch, $repo), "$repo/$branch", $html)."</p>" .
-            "<p>" . Utility::url($compareURL, "See the differences in details", $html) . "\n" .
-            "<br>";
+            Utility::url(GitHubWebhookRequest::getBranchURL($branch, $repo), "$repo/$branch", $html).".</p>" .
+            "<p>" . Utility::url($compareURL, "See the differences in details", $html).".</p>";
 
         foreach ($data['changes'] as $user => $files) {
             $template .= "<strong>Changes by " . Utility::url(GitHubWebhookRequest::getUserURL($user), "@$user", $html) . ":</strong>\n";
@@ -128,6 +125,9 @@ class Notifier
     protected function _getMessageSubject($data)
     {
         $repo = substr( strstr($data['repository'], '/'), 1 );
-        return "[$repo] New watched file changes detected";
+        $branch = $data['branch'];
+        $users = array_keys($data['changes']);
+        $users = Utility::implodez(', ', ' and ', $users);
+        return "[$repo] File change by $users ($branch)";
     }
 }
